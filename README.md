@@ -5,6 +5,7 @@ A Synapse 2 plug-in that adds a lot of new feature to SCP-049.
 
 ## Description
 **This plug-in has a lot of configs, make sure to take a look.**
+*There is currently no available way to detect a natural revive, therefore some configs are temporarely hidden until this is fixed in the next Synapse update probably.*
 With this plug-in you can :
 - [x] Change the speed of SCP-049.
 - [x] Change his health and max health.
