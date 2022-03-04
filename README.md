@@ -1,6 +1,4 @@
 # Scp049rework
-[![Is it cool ?][yes]][contributors-url]
-
 A Synapse 2 plug-in that adds a lot of new feature to SCP-049.
 
 ***
@@ -8,12 +6,12 @@ A Synapse 2 plug-in that adds a lot of new feature to SCP-049.
 ## Description
 **This plug-in has a lot of configs, make sure to take a look.**
 With this plug-in you can :
--. Change the speed of SCP-049.
--. Change his health and max health.
--. Customize his regeneration which work on him and his instances as well.
--. Customize how much health he gains after a kill and/or a revive.
--. Make SCP-049-2 explode on death.
--. Add translations.
+- [x] Change the speed of SCP-049.
+- [x] Change his health and max health.
+- [x] Customize his regeneration which work on him and his instances as well.
+- [x] Customize how much health he gains after a kill and/or a revive.
+- [x] Make SCP-049-2 explode on death.
+- [x] Add translations.
 And more...
 
 Additionally this plug-in brings 2 new commands :
