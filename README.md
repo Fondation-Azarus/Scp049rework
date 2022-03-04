@@ -1,4 +1,6 @@
 # Scp049rework
+[![Is it cool ?][yes]][contributors-url]
+
 A Synapse 2 plug-in that adds a lot of new feature to SCP-049.
 
 ***
