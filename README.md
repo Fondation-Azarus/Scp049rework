@@ -6,7 +6,7 @@ A Synapse 2 plug-in that adds a lot of new feature to SCP-049.
 ## Description
 **This plug-in has a lot of configs, make sure to take a look.**
 | Command | Aliases | Function |
-| :-------------: | :------------; | :------ |
+| :-------------: | :------------: | :------ |
 | .LateRevive | .LateCure .ReanimationTardive | Revives a nearby corpse that you normally wouldn't be able to revive after a configurable amount of kills and/or revives. |
 | .UpgradeInstance | .UInstance .AmeliorerInstance | Upgrades the SCP-04-2 you're looking at which adds him configurable health/max health as well as giving him a configurable SCP-207 effect after a configurable amount of kills and/or revives. |
 
