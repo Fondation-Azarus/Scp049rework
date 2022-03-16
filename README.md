@@ -13,6 +13,7 @@ With this plug-in you can :
 - [x] Customize how much health he gains after a kill and/or a revive.
 - [x] Make SCP-049-2 explode on death.
 - [x] Add translations.
+
 And more...
 
 Additionally this plug-in brings 2 new commands :
