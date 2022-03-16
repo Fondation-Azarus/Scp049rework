@@ -3,7 +3,7 @@ A Synapse 2 plug-in that adds a lot of new feature to SCP-049.
 
 ***
 
-## Description
+## Description :
 **This plug-in has a lot of configs, make sure to take a look.**
 *There is currently no available way to detect a natural revive, therefore some configs are temporarely hidden until this is fixed in the next Synapse update probably.*
 With this plug-in you can :
@@ -24,7 +24,7 @@ Additionally this plug-in brings 2 new commands :
 
 ***
 
-## Installation
+## Installation :
 1. [Install Synapse](https://docs.synapsesl.xyz/setup/setup).
 2. Place the `.dll` file that you can download [here](https://github.com/Fondation-Azarus/Scp049rework/releases/tag/1.0.0) in your plug-in directory.
 3. Restart/Start your server.
