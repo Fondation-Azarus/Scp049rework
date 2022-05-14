@@ -26,5 +26,5 @@ Additionally this plug-in brings 2 new commands :
 
 ## Installation
 1. [Install Synapse](https://docs.synapsesl.xyz/setup/setup).
-2. Place the `.dll` file that you can download [here](https://github.com/Fondation-Azarus/SpecialSynapseStats/releases/latest) in your plug-in directory.
+2. Place the `.dll` file that you can download [here](https://github.com/Fondation-Azarus/Scp049rework/releases/tag/1.0.0) in your plug-in directory.
 3. Restart/Start your server.
