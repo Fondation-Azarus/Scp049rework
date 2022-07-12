@@ -12,7 +12,7 @@ namespace Scp049rework
         SynapseMajor = SynapseController.SynapseMajor,
         SynapseMinor = SynapseController.SynapseMinor,
         SynapsePatch = SynapseController.SynapsePatch,
-        Version = "1.0.0"
+        Version = "1.1.0"
         )]
     public class PluginClass : AbstractPlugin
     {
@@ -40,8 +40,8 @@ namespace Scp049rework
                 scp0492Error = "Vous ne pouvez pas resussiter un SCP-049-2",
                 notNearACorpseError = "Vous devez être proche d'un cadavre un cadavre, si c'st déjà le cas alors ce joueur s'est déconnecté.",
                 freshCorpseError = "Vous pouvez déjà réanimé ce corps sans utiliser cette commande.",
-                notEnoughKillsError = "Vous devez tuer au moins %lateReviveMinKills% personnes avant d'utiliser cette commande.",
-                notEnoughRevivesError = "Vous devez ressusiter au moins %lateReviveMinRevives% personnes avant d'utiliser cette commande.",
+                notEnoughKillsError = "Vous devez tuer au moins %lateReviveMinKills% personnes avant d'utiliser cette commande (actuellement : %current% élimination(s)).",
+                notEnoughRevivesError = "Vous devez ressusiter au moins %lateReviveMinRevives% personnes avant d'utiliser cette commande (actuellement : %current% réanimation(s)).",
                 currentlyAliveError = "Ce joueur est actuellement en vie, vous ne pouvez pas le ressusiter.",
                 revivedPlayer = "Vous avez réssusité ce joueur avec succès.",
                 notLookingToAScp0492Error = "Vous devez regarder un SCP-049-2 en étant proche de lui.",

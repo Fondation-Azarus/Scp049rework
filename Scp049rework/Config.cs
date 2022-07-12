@@ -70,23 +70,26 @@ namespace Scp049rework
 
 
         [Description("SCP-049 speed (if you put this value above 0 then SCP-049 will be able to sprint, you can also put a negative value) :")]
-        public int scp049Speed = 0;
+        public byte scp049Speed = 0;
+
+        [Description("The intensity of SCP-049's movement speed boost (up to +255%) :")]
+        public byte scp049MovementBoost = 10;
 
 
 
         [Description("How many kills should SCP-049 have before being able to use '.LateRevive' :")]
         public int lateReviveMinKills = 3;
 
-        //[Description("How many revives should SCP-049 have before being able to use '.LateRevive' :")] Currently no optimised way to detect those
-        //public int lateReviveMinRevives = 0;
+        [Description("How many revives should SCP-049 have before being able to use '.LateRevive' :")]
+        public int lateReviveMinRevives = 0;
 
 
 
         [Description("How many kills should SCP-049 have before being able to use '.UpgradeInstance' :")]
         public int upgradeInstanceMinKills = 5;
 
-        //[Description("How many revives should SCP-049 have before being able to use '.UpgradeInstance' :")] Currently no optimised way to detect those
-        //public int upgradeInstanceMinRevives = 0;
+        [Description("How many revives should SCP-049 have before being able to use '.UpgradeInstance' :")]
+        public int upgradeInstanceMinRevives = 0;
 
         [Description("Should '.UpgradeInstance' immobilize the SCP-049-2 :")]
         public bool upgradeInstanceImmobilized = true;
@@ -104,16 +107,17 @@ namespace Scp049rework
         public float upgradeInstanceDuration = 10;
 
         [Description("The intensity of SCP-207 effect SCP-049-2 gets when upgraded :")]
-        public byte upgradeInstanceScp207Intensity = 1;
+        public byte upgradeInstanceScp207Intensity = 0;
+
+        [Description("The intensity of SCP-049-2's movement speed boost (up to +255%) :")]
+        public byte upgradeInstanceMovementBoostIntensiry = 25;
 
         [Description("Should SCP-049-2 ignore SCP-207 damages :")]
-        public bool scp0492IgnoreDamageScp207 = true;
+        public bool scp0492IgnoreDamageScp207 = false;
 
 
 
         [Description("Should SCP-049-2 explode on death :")]
         public bool scp0492Explode = false;
-
-
     }
 }

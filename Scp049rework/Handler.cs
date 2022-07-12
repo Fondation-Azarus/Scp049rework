@@ -18,19 +18,18 @@ namespace Scp049rework
             Server.Get.Events.Player.PlayerSetClassEvent += OnSetClass;
             Server.Get.Events.Player.PlayerDeathEvent += OnDeath;
             Server.Get.Events.Player.PlayerDamageEvent += OnDamage;
+            Server.Get.Events.Scp.Scp049.Scp049ReviveEvent += OnRevive;
         }
         private void OnWait()
         {
             PluginClass.killAmount = 0;
             PluginClass.reviveAmount = 0;
             PluginClass.alreadyUpgrading = false;
-        } // Resets a bunch of static var
+        }   // Resets a bunch of static var
 
         private void OnScpAttack(ScpAttackEventArgs ev)
         {
-            if (ev.Scp == null || ev.Target == null)
-                return;
-            if (ev.Scp.RoleType != RoleType.Scp049 || ev.AttackType != ScpAttackType.Scp049_Touch || ev.Target.GodMode)
+            if (ev.Scp == null || ev.Scp.RoleID != (int)RoleType.Scp049 || ev.Target.GodMode)
                 return;
             
             ev.Scp.Heal(Math.Min(PluginClass.Config.killHealAmount + PluginClass.Config.killHealKillAdditive * PluginClass.killAmount + PluginClass.Config.killHealReviveMAdditiver * PluginClass.reviveAmount, PluginClass.Config.killHealMax));
@@ -42,10 +41,13 @@ namespace Scp049rework
             if (ev.Player == null)
                 return;
 
-            if (ev.Role == RoleType.Scp049)
+            try
             {
-                Timing.CallDelayed(0.01f, () =>
+                Timing.CallDelayed(0.3f, () =>
                 {
+                    if (ev.Player.RoleID != (int)RoleType.Scp049)
+                        return;
+
                     ev.Player.SendBroadcast(10, PluginClass.Translation.ActiveTranslation.broadcast);
                     if (PluginClass.Config.maxHP != 0)
                         ev.Player.MaxHealth = PluginClass.Config.maxHP;
@@ -54,51 +56,26 @@ namespace Scp049rework
                     if (PluginClass.Config.regenAmout != 0)
                         Timing.RunCoroutine(RegenScp049(ev.Player));
                     if (PluginClass.Config.scp049Speed != 0)
-                        ev.Player.GiveEffect(PluginClass.Config.scp049Speed > 0 ? Effect.Scp207 : Effect.Disabled, (byte)Math.Abs((short)PluginClass.Config.scp049Speed));
-                    return;
+                        ev.Player.GiveEffect(PluginClass.Config.scp049Speed > 0 ? Effect.Scp207 : Effect.Disabled, (byte)Math.Abs(PluginClass.Config.scp049Speed));
+                    if (PluginClass.Config.scp049MovementBoost > 0)
+                        ev.Player.GiveEffect(Effect.MovementBoost, PluginClass.Config.scp049MovementBoost);
                 });
             }
-
-            /*if (ev.Role != RoleType.Scp0492 || ev.SpawnReason != CharacterClassManager.SpawnReason.Revived) No way to detect revives currently available
-                return;
-
-            float healAmount = Math.Min(PluginClass.Config.reviveHealAmount + PluginClass.Config.reviveHealKillAdditive * PluginClass.killAmount + PluginClass.Config.reviveHealReviveMAdditiver * PluginClass.reviveAmount, PluginClass.Config.reviveHealMax);
-            List<Player> allScp049 = Server.Get.GetPlayers(p => p.RoleType == RoleType.Scp049);
-            if (allScp049.Count <= 0)
-                return;
-            if (allScp049.Count == 1)
-                allScp049[0].Heal(healAmount);
-            else // Idk who would have multiple SCP-049 in his server, but I know somewhere you exist and just for you I wrote this. <3
+            catch (Exception e)
             {
-                Player Scp049 = null;
-                float minDistance = float.PositiveInfinity;
-                foreach (Player s049 in Server.Get.GetPlayers(p => p.RoleType == RoleType.Scp049)) // Finds the closest SCP-049 to the person who got revived, probably the one who revived him.
-                {
-                    float distance = Vector3.Distance(ev.Player.Position, s049.Position);
-                    if (distance >= minDistance) continue;
-
-                    Scp049 = s049;
-                    minDistance = distance;
-                }
-                Scp049.Heal(healAmount);
+                Server.Get.Logger.Error(e);
             }
-            PluginClass.reviveAmount++;*/
         }
 
         private IEnumerator<float> RegenScp049(Player p)
         {
             while (p.RoleID == (int)RoleType.Scp049)
             {
-                //p.Heal(Math.Min(PluginClass.Config.regenAmout + PluginClass.Config.regenKillAdditive * PluginClass.killAmount + PluginClass.Config.regenReviveAdditive * PluginClass.reviveAmount, PluginClass.Config.regenMax)); healing repetively is bugged
-                p.Health += Math.Min(PluginClass.Config.regenAmout + PluginClass.Config.regenKillAdditive * PluginClass.killAmount + PluginClass.Config.regenReviveAdditive * PluginClass.reviveAmount, PluginClass.Config.regenMax);
-                p.Health = Math.Min(p.Health, p.MaxHealth);
+                p.Heal(Math.Min(PluginClass.Config.regenAmout + PluginClass.Config.regenKillAdditive * PluginClass.killAmount + PluginClass.Config.regenReviveAdditive * PluginClass.reviveAmount, PluginClass.Config.regenMax)); // healing repetively is bugged
 
                 foreach (Player z in Server.Get.GetPlayers(z => z.RoleType == RoleType.Scp0492 && Vector3.Distance(p.Position, z.Position) <= (PluginClass.Config.regenInstanceRadius == 0 ? float.PositiveInfinity : PluginClass.Config.regenInstanceRadius)))
-                {
-                    //z.Heal(Math.Min(PluginClass.Config.regenInstanceAmout + PluginClass.Config.regenKillAdditive * PluginClass.killAmount + PluginClass.Config.regenReviveAdditive * PluginClass.reviveAmount, PluginClass.Config.regenMax));
-                    z.Health += Math.Min(PluginClass.Config.regenInstanceAmout + PluginClass.Config.regenKillAdditive * PluginClass.killAmount + PluginClass.Config.regenReviveAdditive * PluginClass.reviveAmount, PluginClass.Config.regenMax);
-                    z.Health = Math.Min(z.Health, z.MaxHealth);
-                }
+                    z.Heal(Math.Min(PluginClass.Config.regenInstanceAmout + PluginClass.Config.regenKillAdditive * PluginClass.killAmount + PluginClass.Config.regenReviveAdditive * PluginClass.reviveAmount, PluginClass.Config.regenMax));
+
                 yield return Timing.WaitForSeconds(PluginClass.Config.regenTime);
             }
         }
@@ -118,6 +95,14 @@ namespace Scp049rework
                 return;
             if (ev.Victim.RoleType == RoleType.Scp049 || (ev.Victim.RoleType == RoleType.Scp0492 && PluginClass.Config.scp0492IgnoreDamageScp207))
                 ev.Allow = false;
+        }
+
+        private void OnRevive(Scp049ReviveEvent ev)
+        {
+            if (!ev.Finish || ev.Scp049 == null) return;
+
+            ev.Scp049.Heal(Math.Min(PluginClass.Config.reviveHealAmount + PluginClass.Config.reviveHealKillAdditive * PluginClass.killAmount + PluginClass.Config.reviveHealReviveMAdditiver * PluginClass.reviveAmount, PluginClass.Config.reviveHealMax));
+            PluginClass.reviveAmount++;
         }
     }
 }
