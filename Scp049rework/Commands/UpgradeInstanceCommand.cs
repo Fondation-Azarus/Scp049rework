@@ -48,15 +48,15 @@ namespace Scp049rework.Commands
 
             else if (PluginClass.killAmount < PluginClass.Config.lateReviveMinKills)
             {
-                result.Message = PluginClass.Translation.ActiveTranslation.notEnoughKillsError.Replace("%lateReviveMinKills%", PluginClass.Config.lateReviveMinKills.ToString());
+                result.Message = PluginClass.Translation.ActiveTranslation.notEnoughKillsError.Replace("%lateReviveMinKills%", PluginClass.Config.lateReviveMinKills.ToString()).Replace("%current%", PluginClass.killAmount.ToString());
                 result.State = CommandResultState.Error;
             }
 
-            /*else if (PluginClass.reviveAmount < PluginClass.Config.lateReviveMinRevives) // No way to detect revives currently available
+            else if (PluginClass.reviveAmount < PluginClass.Config.lateReviveMinRevives)
             {
-                result.Message = PluginClass.Translation.ActiveTranslation.notEnoughRevivesError.Replace("%lateReviveMinRevives%", PluginClass.Config.lateReviveMinRevives.ToString());
+                result.Message = PluginClass.Translation.ActiveTranslation.notEnoughRevivesError.Replace("%lateReviveMinRevives%", PluginClass.Config.lateReviveMinRevives.ToString()).Replace("%current%", PluginClass.reviveAmount.ToString());
                 result.State = CommandResultState.Error;
-            }*/
+            }
 
             else if (PluginClass.alreadyUpgrading)
             {
@@ -77,7 +77,6 @@ namespace Scp049rework.Commands
 
         private IEnumerator<float> Upgrade(Player scp049, Player z)
         {
-            bool upgradeFinished = true;
             UnityEngine.Vector3 position = scp049.Position;
             if (PluginClass.Config.upgradeInstanceImmobilized)
                 z.GiveEffect(Synapse.Api.Enum.Effect.Ensnared);
@@ -87,10 +86,9 @@ namespace Scp049rework.Commands
             {
                 if (UnityEngine.Vector3.Distance(scp049.Position, z.Position) > 3 || scp049.RoleType != RoleType.Scp049 || z.RoleType != RoleType.Scp0492 || (!PluginClass.Config.upgradeInstanceEverywhere && scp049.Room.RoomType != MapGeneration.RoomName.Hcz049) || position != scp049.Position)
                 {
-                    upgradeFinished = false;
                     if (PluginClass.Config.upgradeInstanceImmobilized)
                         z.GiveEffect(Synapse.Api.Enum.Effect.Ensnared, 0, 0);
-                    break;
+                    yield break;
                 }
 
                 string upgradeBar = "<b>[";
@@ -106,11 +104,12 @@ namespace Scp049rework.Commands
                 yield return Timing.WaitForSeconds(PluginClass.Config.upgradeInstanceDuration / 10);
             }
 
-            if (upgradeFinished && UnityEngine.Vector3.Distance(scp049.Position, z.Position) <= 3 && scp049.RoleType == RoleType.Scp049 && z.RoleType == RoleType.Scp0492 && (PluginClass.Config.upgradeInstanceEverywhere || scp049.Room.RoomType == MapGeneration.RoomName.Hcz049) && position == scp049.Position)
+            if (UnityEngine.Vector3.Distance(scp049.Position, z.Position) <= 3 && scp049.RoleType == RoleType.Scp049 && z.RoleType == RoleType.Scp0492 && (PluginClass.Config.upgradeInstanceEverywhere || scp049.Room.RoomType == MapGeneration.RoomName.Hcz049) && position == scp049.Position)
             {
                 z.MaxHealth += PluginClass.Config.upgradeInstanceMaxHealthAdd;
                 z.Heal(PluginClass.Config.upgradeInstanceHealAmount);
                 z.GiveEffect(Synapse.Api.Enum.Effect.Scp207, PluginClass.Config.upgradeInstanceScp207Intensity);
+                z.GiveEffect(Synapse.Api.Enum.Effect.MovementBoost, PluginClass.Config.upgradeInstanceMovementBoostIntensiry);
                 if (PluginClass.Config.upgradeInstanceImmobilized)
                     z.GiveEffect(Synapse.Api.Enum.Effect.Ensnared, 0, 0);
                 scp049.GiveTextHint(PluginClass.Translation.ActiveTranslation.upgradedScp0492, 4);

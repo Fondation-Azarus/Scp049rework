@@ -1,5 +1,4 @@
 ﻿using Synapse.Command;
-using MEC;
 using Synapse;
 using System.Linq;
 
@@ -26,7 +25,7 @@ namespace Scp049rework.Commands
                 return result;
             }
 
-            Synapse.Api.Ragdoll r = Synapse.Api.Map.Get.Ragdolls.FirstOrDefault(rag => UnityEngine.Vector3.Distance(rag.ragdoll.gameObject.transform.position, context.Player.Position) < 3);
+            Synapse.Api.Ragdoll r = Synapse.Api.Map.Get.Ragdolls.FirstOrDefault(rag => rag.ragdoll?.gameObject?.transform != null && UnityEngine.Vector3.Distance(rag.ragdoll.gameObject.transform.position, context.Player.Position) < 3);
 
             if (r == null)
             {
@@ -37,9 +36,9 @@ namespace Scp049rework.Commands
 
             if (r.RoleType == RoleType.Scp0492)
             {
-                    result.Message = PluginClass.Translation.ActiveTranslation.notNearACorpseError;
-                    result.State = CommandResultState.Error;
-                    return result;
+                result.Message = PluginClass.Translation.ActiveTranslation.notNearACorpseError;
+                result.State = CommandResultState.Error;
+                return result;
             }
 
             Synapse.Api.Player p = Server.Get.GetPlayer(r.Owner.PlayerId); ;
@@ -55,7 +54,7 @@ namespace Scp049rework.Commands
                 result.State = CommandResultState.Error;
             }*/
 
-            else if (p.RoleID != (int)RoleType.Spectator)
+            else if (p.RoleID != (int)RoleType.Spectator || p.OverWatch)
             {
                 result.Message = PluginClass.Translation.ActiveTranslation.currentlyAliveError;
                 result.State = CommandResultState.Error;
@@ -69,15 +68,15 @@ namespace Scp049rework.Commands
 
             else if (PluginClass.killAmount < PluginClass.Config.lateReviveMinKills)
             {
-                result.Message = PluginClass.Translation.ActiveTranslation.notEnoughKillsError.Replace("%lateReviveMinKills%", PluginClass.Config.lateReviveMinKills.ToString());
+                result.Message = PluginClass.Translation.ActiveTranslation.notEnoughKillsError.Replace("%lateReviveMinKills%", PluginClass.Config.lateReviveMinKills.ToString()).Replace("%current%", PluginClass.killAmount.ToString());
                 result.State = CommandResultState.Error;
             }
 
-            /*else if (PluginClass.reviveAmount < PluginClass.Config.lateReviveMinRevives) // No way to detect revives currently available
+            else if (PluginClass.reviveAmount < PluginClass.Config.lateReviveMinRevives)
             {
-                result.Message = PluginClass.Translation.ActiveTranslation.notEnoughRevivesError.Replace("%lateReviveMinRevives%", PluginClass.Config.lateReviveMinRevives.ToString());
+                result.Message = PluginClass.Translation.ActiveTranslation.notEnoughRevivesError.Replace("%lateReviveMinRevives%", PluginClass.Config.lateReviveMinRevives.ToString()).Replace("%current%", PluginClass.reviveAmount.ToString());
                 result.State = CommandResultState.Error;
-            }*/
+            }
 
             else
             {
@@ -85,7 +84,6 @@ namespace Scp049rework.Commands
                 p.RoleType = RoleType.Scp0492;
                 context.Player.Heal(System.Math.Min(PluginClass.Config.reviveHealAmount + PluginClass.Config.reviveHealKillAdditive * PluginClass.killAmount + PluginClass.Config.reviveHealReviveMAdditiver * PluginClass.reviveAmount, PluginClass.Config.reviveHealMax));
                 PluginClass.reviveAmount++;
-                Timing.CallDelayed(1, () => p.Position = context.Player.Position); // Idk why but sometimes SCP-049-2 ends up in a terrifingly obscure box which crushes his soul. :c
                 result.Message = PluginClass.Translation.ActiveTranslation.revivedPlayer;
                 result.State = CommandResultState.Ok;
             }
